@@ -1,1 +1,1 @@
-# db-api
+# seller-api
