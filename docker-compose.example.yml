@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6.0.5
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=12345678
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - /:/data/db
+    networks:
+      - network-name
+  db-api:
+    image: db-api
+    container_name: db-api
+    build: .
+    ports:
+      - "443:443"
+    volumes:
+      - /.env:/app/.env
+      - /etc/letsencrypt/live/domain/privkey.pem:/etc/letsencrypt/live/domain/privkey.pem
+      - /etc/letsencrypt/live/domain/fullchain.pem:/etc/letsencrypt/live/domain/fullchain.pem
+    networks:
+      - network-name
+networks:
+  omega-network:
+    external: true
